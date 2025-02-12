@@ -1,0 +1,30 @@
+{
+  "name": "appiumcucumbertypescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --require-module ts-node/register --require src/steps/**/*.ts features/**/*.feature"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IonutMoldovan/AppiumCucumberTypescript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IonutMoldovan/AppiumCucumberTypescript/issues"
+  },
+  "homepage": "https://github.com/IonutMoldovan/AppiumCucumberTypescript#readme",
+  "devDependencies": {
+    "@cucumber/cucumber": "^11.2.0",
+    "@types/cucumber": "^7.0.0",
+    "@types/node": "^22.13.1",
+    "@wdio/appium-service": "^9.8.0",
+    "appium": "^2.15.0",
+    "appium-uiautomator2-driver": "^4.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "webdriverio": "^9.8.0"
+  }
+}
