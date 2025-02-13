@@ -1,6 +1,6 @@
 Here’s the complete updated guide for setting up the Appium project and configuring the environment for Android emulator and SDK:
 First let me show you how the Cucumber Report Looks after running this test with Appium on Android phone
-![Uploading appium_cucumber_android_settings_Test.png…]()
+[[![Uploading appium_cucumber_android_settings_Test.png…]()](https://github.com/IonutMoldovan/AppiumWebdriverIoCucumberTypescript/issues/1)](https://github.com/IonutMoldovan/AppiumWebdriverIoCucumberTypescript/issues/1)
 
 Appium Cucumber TypeScript Project Setup
 This repository demonstrates setting up Appium with Cucumber in TypeScript for mobile automation testing.
