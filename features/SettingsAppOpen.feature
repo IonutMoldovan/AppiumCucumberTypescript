@@ -1,6 +1,7 @@
-Feature: Opening the Settings app on Android Emulator
+Feature: Opening the Settings app on Android Emulator then open Networks And Internet settings
 
-  Scenario: Open Wi-Fi settings
+  Scenario: Open Networks And Internet settings
     Given I open the Settings app
-    When I open Wi-Fi settings
-    Then I should see the Wi-Fi settings page
+    Then I verify the app is on the Settings page
+    When I open Networks And Internet settings
+    Then I should see the Networks And Internet settings
