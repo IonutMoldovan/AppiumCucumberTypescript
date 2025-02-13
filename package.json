@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js --require-module ts-node/register --require src/steps/**/*.ts features/**/*.feature"
+    "test": "cucumber-js --require-module ts-node/register --require src/steps/**/*.ts features/**/*.feature --format json:./reports/cucumber_report.json",
+    "generate-report": "node generateReport.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "@wdio/appium-service": "^9.8.0",
     "appium": "^2.15.0",
     "appium-uiautomator2-driver": "^4.0.1",
+    "cucumber-html-reporter": "^7.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "webdriverio": "^9.8.0"

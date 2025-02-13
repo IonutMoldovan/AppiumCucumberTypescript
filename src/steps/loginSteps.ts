@@ -2,38 +2,48 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import { remote } from 'webdriverio';
 import { Capabilities } from '@wdio/types';
 
-// Explicitly define the driver type
 let driver: WebdriverIO.Browser;
 
-Given('I open the login page', async function () {
+Given('I open the Settings app', async function () {
   driver = await remote({
     logLevel: 'error',
-    path: '/wd/hub',  // Ensure this path is correct
-    url: 'http://localhost:4723',  // Appium server URL
+    path: '/',  // Corrected path (no extra '/session' at the end)
+    hostname: '127.0.0.1',
+    port: 4723,
     capabilities: {
       platformName: 'Android',
-      deviceName: 'emulator-5554',  // Replace with your emulator/device name
-      app: './resources/periodcalendar.apk',  // Path to your APK in the 'resources' folder
-      automationName: 'UiAutomator2',
-      appPackage: 'com.periodcalendar',  // Ensure this is the correct app package name
-      appActivity: 'com.periodcalendar.MainActivity',  // Ensure this is the correct main activity
-    } as Capabilities.AppiumCapabilities // Cast to Appium-specific capabilities
+      'appium:deviceName': 'emulator-5554',
+      'appium:appPackage': 'com.android.settings',
+      'appium:appActivity': 'com.android.settings.Settings',
+      'appium:automationName': 'UiAutomator2',
+      'appium:deviceReadyTimeout': 60,
+      'appium:newCommandTimeout': 600,
+    } as Capabilities.AppiumCapabilities
+  });
+
+  // Wait for the Settings app to fully load
+  await driver.waitUntil(async () => {
+    const settingsPageElement = await driver.$('~Settings');  // Use a suitable selector for a visible element on the Settings screen
+    return settingsPageElement.isDisplayed();  // Wait until the element is displayed
+  }, {
+    timeout: 15000,  // Maximum wait time in milliseconds (10 seconds)
+    timeoutMsg: 'Settings app did not open within 15 seconds',  // Timeout message if the wait fails
   });
 });
 
-When('I enter valid credentials', async function () {
-  // Assuming there are input fields for username and password
-  await driver.$('~username').setValue('testUser');
-  await driver.$('~password').setValue('testPassword');
-  await driver.$('~loginButton').click();
+
+When('I open Wi-Fi settings', async function () {
+  const wifiElement = await driver.$('~Wi-Fi');
+  await wifiElement.waitForDisplayed({ timeout: 10000 });  // Wait up to 10 seconds for element to be visible
+  await wifiElement.click();
 });
 
-Then('I should see the homepage', async function () {
-  // Assuming the homepage has an element with the identifier ~homePage
-  const homePageElement = await driver.$('~homePage');
-  const isDisplayed = await homePageElement.isDisplayed();
+Then('I should see the Wi-Fi settings page', async function () {
+  const wifiPageElement = await driver.$('~Wi-Fi settings');
+  await wifiPageElement.waitForDisplayed({ timeout: 10000 });  // Wait for Wi-Fi settings page to load
+  const isDisplayed = await wifiPageElement.isDisplayed();
   if (!isDisplayed) {
-    throw new Error('Homepage is not displayed');
+    throw new Error('Wi-Fi settings page is not displayed');
   }
   await driver.deleteSession();
 });
