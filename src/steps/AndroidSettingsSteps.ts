@@ -1,4 +1,4 @@
-import { Given, When, Then } from '@cucumber/cucumber';
+import { Given, When, Then, Before } from '@cucumber/cucumber';
 import { remote } from 'webdriverio';
 import { Capabilities } from '@wdio/types';
 import { setDefaultTimeout } from '@cucumber/cucumber';
@@ -9,11 +9,21 @@ import path from 'path';
 setDefaultTimeout(30000);
 let driver: WebdriverIO.Browser;
 
-// Ensure the screenshots folder exists
+// Define screenshot directory path
 const screenshotDir = path.resolve(__dirname, '../../screenshots');
-if (!fs.existsSync(screenshotDir)) {
-  fs.mkdirSync(screenshotDir);
+
+// Helper function to remove and recreate the screenshots folder
+function cleanScreenshotFolder() {
+  if (fs.existsSync(screenshotDir)) {
+    fs.rmSync(screenshotDir, { recursive: true, force: true });
+  }
+  fs.mkdirSync(screenshotDir, { recursive: true });
 }
+
+// Ensure the screenshots folder is cleared before each test run
+Before(() => {
+  cleanScreenshotFolder();
+});
 
 // Helper function to take and save a screenshot
 async function saveScreenshot() {
