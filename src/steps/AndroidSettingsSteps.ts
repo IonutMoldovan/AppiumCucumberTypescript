@@ -2,16 +2,26 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import { remote } from 'webdriverio';
 import { Capabilities } from '@wdio/types';
 import { setDefaultTimeout } from '@cucumber/cucumber';
+import fs from 'fs';
+import path from 'path';
 
 // Set global timeout for all steps to 30 seconds
 setDefaultTimeout(30000);
 let driver: WebdriverIO.Browser;
 let networkAndInternetElement: WebdriverIO.Element;
 
-// Helper function to take a screenshot and return it
-async function takeScreenshot() {
+// Ensure the screenshots folder exists
+const screenshotDir = path.resolve(__dirname, '../../screenshots');
+if (!fs.existsSync(screenshotDir)) {
+  fs.mkdirSync(screenshotDir);
+}
+
+// Helper function to take and save a screenshot
+async function saveScreenshot() {
   const screenshot = await driver.takeScreenshot();
-  return screenshot; // return the base64 screenshot
+  const screenshotPath = path.join(screenshotDir, `screenshot_${Date.now()}.png`);
+  fs.writeFileSync(screenshotPath, screenshot, 'base64');
+  return screenshotPath; // return the saved screenshot path
 }
 
 Given('I open the Settings app', { timeout: 60000 }, async function () {
@@ -31,9 +41,9 @@ Given('I open the Settings app', { timeout: 60000 }, async function () {
     } as Capabilities.AppiumCapabilities
   });
 
-  // Take a screenshot after opening the Settings app
-  const screenshot = await takeScreenshot();
-  this.attach(screenshot, 'image/png'); // Attach screenshot to Cucumber report
+  // Take and save screenshot after opening the Settings app
+  const screenshotPath = await saveScreenshot();
+  this.attach(screenshotPath, 'image/png'); // Attach screenshot to Cucumber report
 });
 
 Then('I verify the app is on the Settings page', async function () {
@@ -41,18 +51,18 @@ Then('I verify the app is on the Settings page', async function () {
   networkAndInternetElement = await driver.$('//android.widget.TextView[@resource-id="android:id/title" and @text="Network & internet"]') as unknown as WebdriverIO.Element;
   await networkAndInternetElement.waitForDisplayed({ timeout: 15000 });
 
-  // Take a screenshot after verifying the Settings page
-  const screenshot = await takeScreenshot();
-  this.attach(screenshot, 'image/png'); // Attach screenshot to Cucumber report
+  // Take and save screenshot after verifying the Settings page
+  const screenshotPath = await saveScreenshot();
+  this.attach(screenshotPath, 'image/png'); // Attach screenshot to Cucumber report
 });
 
 When('I open Networks And Internet settings', async function () {
   await networkAndInternetElement.waitForDisplayed({ timeout: 15000 });
   await networkAndInternetElement.click();
 
-  // Take a screenshot after opening Networks & Internet settings
-  const screenshot = await takeScreenshot();
-  this.attach(screenshot, 'image/png'); // Attach screenshot to Cucumber report
+  // Take and save screenshot after opening Networks & Internet settings
+  const screenshotPath = await saveScreenshot();
+  this.attach(screenshotPath, 'image/png'); // Attach screenshot to Cucumber report
 });
 
 Then('I should see the Networks And Internet settings', async function () {
@@ -63,9 +73,9 @@ Then('I should see the Networks And Internet settings', async function () {
     throw new Error('Internet settings page is not displayed');
   }
 
-  // Take a screenshot of the Networks And Internet settings page
-  const screenshot = await takeScreenshot();
-  this.attach(screenshot, 'image/png'); // Attach screenshot to Cucumber report
+  // Take and save screenshot of the Networks And Internet settings page
+  const screenshotPath = await saveScreenshot();
+  this.attach(screenshotPath, 'image/png'); // Attach screenshot to Cucumber report
   
   await driver.deleteSession();
 });
