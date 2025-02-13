@@ -16,6 +16,9 @@ var options = {
             "Executed": "Remote"
         },
         failedSummaryReport: true,
+        output: 'reports/cucumber_report.html',
+        screenshotsDirectory: 'screenshots/',
+        storeScreenshots: true
     };
 
     reporter.generate(options);
